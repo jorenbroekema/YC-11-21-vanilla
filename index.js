@@ -1,14 +1,38 @@
-console.log("hello");
+class ReactiveComponent extends HTMLElement {
+  get text() {
+    return this._text;
+  }
 
-const app = document.getElementById("app");
+  set text(value) {
+    this._text = value;
+    this.render();
+  }
 
-const text = "hello";
-const text2 = "hello 2";
+  constructor() {
+    super();
+    this.text = "Text";
+  }
 
-const tpl = `
-  <p>${text}</p>
-  <p>Bar</p>
-  <p>${text2}</p>
-`;
+  connectedCallback() {
+    this.render();
+  }
 
-app.innerHTML = tpl;
+  disconnectedCallback() {
+    console.log("bye bye");
+  }
+
+  render() {
+    this.innerHTML = `
+      <style>
+        h1 {
+          color: yellow;
+        }
+        p {
+          color: blue;
+        }
+      </style>
+      <p>${this.text}</p>
+    `;
+  }
+}
+customElements.define("reactive-component", ReactiveComponent);
